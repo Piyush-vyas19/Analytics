@@ -10,7 +10,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 flex flex-col w-screen">
       {/* Header */}
       <header className="py-10 text-center text-white">
         <h1 className="text-5xl font-extrabold tracking-wide mb-3">

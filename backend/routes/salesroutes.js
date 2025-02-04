@@ -57,4 +57,43 @@ router.get('/total-sales', async (req, res) => {
   }
 });
 
+router.get('/categorysales',async (req, res) => {
+  try {
+    const { startMonth, endMonth } = req.query;
+    const startMonthNum = monthMapping[startMonth];
+    const endMonthNum = monthMapping[endMonth];
+
+    if (!startMonthNum || !endMonthNum) {
+      throw new Error('Invalid month names provided');
+    }
+
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('Product_Category, Total_Amount, Month');
+
+    if (error) {
+      throw error;
+    }
+
+    const filteredData = data.filter(row => {
+      const rowMonthNum = monthMapping[row.Month];
+      return rowMonthNum >= startMonthNum && rowMonthNum <= endMonthNum;
+    });
+
+    const aggregatedData = filteredData.reduce((acc, row) => {
+      if (!acc[row.Product_Category]) {
+        acc[row.Product_Category] = { category: row.Product_Category, total_sales: 0 };
+      }
+      acc[row.Product_Category].total_sales += row.Total_Amount;
+      return acc;
+    }, {});
+
+    res.json(Object.values(aggregatedData));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    throw error;
+  }
+});
+
+
 module.exports = router;

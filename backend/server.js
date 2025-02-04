@@ -1,12 +1,15 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const salesRoutes = require('./routes/salesroutes');
+const cors = require('cors');
+
+
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-
+app.use(cors());
 // Middleware to parse JSON requests
 app.use(express.json());
 
